@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using Abp.Authorization.Users;
 using Abp.Extensions;
+using static ProMan.Constants.Enum.StatusEnum;
 
 namespace ProMan.Authorization.Users
 {
@@ -30,5 +33,7 @@ namespace ProMan.Authorization.Users
 
             return user;
         }
+
+        public Sex? Sex { get; set; }
     }
 }
