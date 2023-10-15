@@ -6,6 +6,7 @@ using Abp.IdentityFramework;
 using Abp.Runtime.Session;
 using ProMan.Authorization.Users;
 using ProMan.MultiTenancy;
+using ProMan.Context;
 
 namespace ProMan
 {
@@ -18,9 +19,12 @@ namespace ProMan
 
         public UserManager UserManager { get; set; }
 
-        protected ProManAppServiceBase()
+        protected IContext Context { get; set; }
+
+        protected ProManAppServiceBase(IContext context)
         {
             LocalizationSourceName = ProManConsts.LocalizationSourceName;
+            Context = context;
         }
 
         protected virtual async Task<User> GetCurrentUserAsync()
