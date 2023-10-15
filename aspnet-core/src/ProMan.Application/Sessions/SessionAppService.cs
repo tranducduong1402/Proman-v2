@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abp.Auditing;
+using ProMan.Context;
 using ProMan.Sessions.Dto;
 
 namespace ProMan.Sessions
 {
     public class SessionAppService : ProManAppServiceBase, ISessionAppService
     {
+        public SessionAppService(IContext context) : base(context) { }
         [DisableAuditing]
         public async Task<GetCurrentLoginInformationsOutput> GetCurrentLoginInformations()
         {

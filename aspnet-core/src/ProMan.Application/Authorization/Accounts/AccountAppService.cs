@@ -3,6 +3,7 @@ using Abp.Configuration;
 using Abp.Zero.Configuration;
 using ProMan.Authorization.Accounts.Dto;
 using ProMan.Authorization.Users;
+using ProMan.Context;
 
 namespace ProMan.Authorization.Accounts
 {
@@ -14,7 +15,7 @@ namespace ProMan.Authorization.Accounts
         private readonly UserRegistrationManager _userRegistrationManager;
 
         public AccountAppService(
-            UserRegistrationManager userRegistrationManager)
+            UserRegistrationManager userRegistrationManager, IContext context) : base(context)
         {
             _userRegistrationManager = userRegistrationManager;
         }
