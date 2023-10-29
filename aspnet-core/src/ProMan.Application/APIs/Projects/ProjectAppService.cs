@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Abp.UI;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProMan.APIs.Projects.Dto;
 using ProMan.Authorization.Users;
 using ProMan.Context;
@@ -43,6 +45,38 @@ namespace ProMan.APIs.Projects
                 });
 
             return await query.GetGridResult(query, input);
+        }
+
+        private async System.Threading.Tasks.Task ValProject(CreateEditProjectDto input)
+        {
+            var isExistName = await Context.GetAll<Project>()
+                 .Where(s => s.Name == input.Name).Where(s => s.Id != input.Id).AnyAsync();
+
+            if (isExistName)
+                throw new UserFriendlyException(string
+                    .Format("Project name {0} already existed", input.Name));
+        }
+
+        [HttpPost]
+        public async Task<CreateEditProjectDto> Create(CreateEditProjectDto input)
+        {
+            var project = ObjectMapper.Map<Project>(input);
+            input.Id = await Context.GetRepo<Project, long>().InsertAndGetIdAsync(project);
+            CurrentUnitOfWork.SaveChanges();
+
+            //insert projectUser
+            foreach (var pUserDto in input.Users)
+            {
+                var projectUser = new ProjectUser
+                {
+                    ProjectId = input.Id,
+                    UserId = pUserDto.UserId,
+                    Type = pUserDto.Type,
+                };
+                await Context.GetRepo<ProjectUser, long>().InsertAsync(projectUser);
+            }
+
+            return input;
         }
     }
 }

@@ -6,3 +6,9 @@ export class AppTenantAvailabilityState {
     static InActive: number = TenantAvailabilityState._2;
     static NotFound: number = TenantAvailabilityState._3;
 }
+
+export enum SortDirectionEnum {
+    Ascending = 0,
+    Descending = 1
+  }
+  

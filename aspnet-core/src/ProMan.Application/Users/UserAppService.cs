@@ -22,6 +22,12 @@ using ProMan.Roles.Dto;
 using ProMan.Users.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ProMan.Paging;
+using Microsoft.AspNetCore.Mvc;
+using ProMan.APIs.Projects.Dto;
+using ProMan.Entities;
+using ProMan.Context;
+using ProMan.Extension;
 
 namespace ProMan.Users
 {
@@ -34,6 +40,7 @@ namespace ProMan.Users
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IAbpSession _abpSession;
         private readonly LogInManager _logInManager;
+        private readonly IContext _context;
 
         public UserAppService(
             IRepository<User, long> repository,
@@ -42,7 +49,8 @@ namespace ProMan.Users
             IRepository<Role> roleRepository,
             IPasswordHasher<User> passwordHasher,
             IAbpSession abpSession,
-            LogInManager logInManager)
+            LogInManager logInManager,
+            IContext context)
             : base(repository)
         {
             _userManager = userManager;
@@ -51,6 +59,7 @@ namespace ProMan.Users
             _passwordHasher = passwordHasher;
             _abpSession = abpSession;
             _logInManager = logInManager;
+            _context = context;
         }
 
         public override async Task<UserDto> CreateAsync(CreateUserDto input)
@@ -61,10 +70,36 @@ namespace ProMan.Users
 
             user.TenantId = AbpSession.TenantId;
             user.IsEmailConfirmed = true;
+            user.IsClient = false;
 
             await _userManager.InitializeOptionsAsync(AbpSession.TenantId);
 
             CheckErrors(await _userManager.CreateAsync(user, input.Password));
+
+            if (input.RoleNames != null)
+            {
+                CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
+            }
+
+            CurrentUnitOfWork.SaveChanges();
+
+            return MapToEntityDto(user);
+        }
+
+        [HttpPost]
+        public async Task<UserDto> CreateClient(CreateUserDto input)
+        {
+            CheckCreatePermission();
+
+            var user = ObjectMapper.Map<User>(input);
+
+            user.TenantId = AbpSession.TenantId;
+            user.IsEmailConfirmed = true;
+            user.IsClient = true;
+
+            await _userManager.InitializeOptionsAsync(AbpSession.TenantId);
+
+            CheckErrors(await _userManager.CreateAsync(user, "123qwe!@"));
 
             if (input.RoleNames != null)
             {
@@ -82,6 +117,10 @@ namespace ProMan.Users
 
             var user = await _userManager.GetUserByIdAsync(input.Id);
 
+            if(user.IsClient.Value == true) {
+                input.IsClient = true;
+            }
+
             MapToEntity(input, user);
 
             CheckErrors(await _userManager.UpdateAsync(user));
@@ -94,14 +133,14 @@ namespace ProMan.Users
             return await GetAsync(input);
         }
 
-        public override async Task DeleteAsync(EntityDto<long> input)
+        public override async System.Threading.Tasks.Task DeleteAsync(EntityDto<long> input)
         {
             var user = await _userManager.GetUserByIdAsync(input.Id);
             await _userManager.DeleteAsync(user);
         }
 
         [AbpAuthorize(PermissionNames.Pages_Users_Activation)]
-        public async Task Activate(EntityDto<long> user)
+        public async System.Threading.Tasks.Task Activate(EntityDto<long> user)
         {
             await Repository.UpdateAsync(user.Id, async (entity) =>
             {
@@ -110,7 +149,7 @@ namespace ProMan.Users
         }
 
         [AbpAuthorize(PermissionNames.Pages_Users_Activation)]
-        public async Task DeActivate(EntityDto<long> user)
+        public async System.Threading.Tasks.Task DeActivate(EntityDto<long> user)
         {
             await Repository.UpdateAsync(user.Id, async (entity) =>
             {
@@ -124,7 +163,7 @@ namespace ProMan.Users
             return new ListResultDto<RoleDto>(ObjectMapper.Map<List<RoleDto>>(roles));
         }
 
-        public async Task ChangeLanguage(ChangeUserLanguageDto input)
+        public async System.Threading.Tasks.Task ChangeLanguage(ChangeUserLanguageDto input)
         {
             await SettingManager.ChangeSettingForUserAsync(
                 AbpSession.ToUserIdentifier(),
@@ -245,6 +284,48 @@ namespace ProMan.Users
             }
 
             return true;
+        }
+
+        [HttpPost]
+        public async Task<GridResult<UserDto>> GetAllClientPaging(GridParam input)
+        {
+            var query = _context.GetAll<User>()
+                .Where(s => !s.IsDeleted)
+                .Where(s => s.IsClient.Value)
+                .Select(s => new UserDto
+                {
+                    Id = s.Id,
+                    CreationTime = s.CreationTime,
+                    EmailAddress = s.EmailAddress,
+                    FullName = s.FullName,
+                    IsActive = s.IsActive,
+                    Name = s.Name,
+                    Surname = s.Surname,
+                    UserName = s.UserName,
+                });
+
+            return await query.GetGridResult(query, input);
+        }
+
+        [HttpPost]
+        public async Task<GridResult<UserDto>> GetAllUserPaging(GridParam input)
+        {
+            var query = _context.GetAll<User>()
+                .Where(s => !s.IsDeleted)
+                .Where(s => s.IsClient == null || s.IsClient.Value == false)
+                .Select(s => new UserDto
+                {
+                    Id = s.Id,
+                    CreationTime = s.CreationTime,
+                    EmailAddress = s.EmailAddress,
+                    FullName = s.FullName,
+                    IsActive = s.IsActive,
+                    Name = s.Name,
+                    Surname = s.Surname,
+                    UserName = s.UserName
+                });
+
+            return await query.GetGridResult(query, input);
         }
     }
 }

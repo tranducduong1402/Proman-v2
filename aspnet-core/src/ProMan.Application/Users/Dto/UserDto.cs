@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Abp.Application.Services.Dto;
 using Abp.Authorization.Users;
 using Abp.AutoMapper;
+using ProMan.Anotations;
 using ProMan.Authorization.Users;
 
 namespace ProMan.Users.Dto
@@ -12,19 +13,23 @@ namespace ProMan.Users.Dto
     {
         [Required]
         [StringLength(AbpUserBase.MaxUserNameLength)]
+        [ApplySearch]
         public string UserName { get; set; }
 
         [Required]
         [StringLength(AbpUserBase.MaxNameLength)]
+        [ApplySearch]
         public string Name { get; set; }
 
         [Required]
         [StringLength(AbpUserBase.MaxSurnameLength)]
+        [ApplySearch]
         public string Surname { get; set; }
 
         [Required]
         [EmailAddress]
         [StringLength(AbpUserBase.MaxEmailAddressLength)]
+        [ApplySearch]
         public string EmailAddress { get; set; }
 
         public bool IsActive { get; set; }
@@ -36,5 +41,7 @@ namespace ProMan.Users.Dto
         public DateTime CreationTime { get; set; }
 
         public string[] RoleNames { get; set; }
+
+        public bool? IsClient { get; set; }
     }
 }

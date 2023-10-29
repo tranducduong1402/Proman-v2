@@ -31,7 +31,7 @@ namespace ProMan.Users.Dto
 
         public string[] RoleNames { get; set; }
 
-        [Required]
+        //[Required]
         [StringLength(AbpUserBase.MaxPlainPasswordLength)]
         [DisableAuditing]
         public string Password { get; set; }
@@ -43,5 +43,7 @@ namespace ProMan.Users.Dto
                 RoleNames = new string[0];
             }
         }
+
+        public bool? IsClient { get; set; }
     }
 }
