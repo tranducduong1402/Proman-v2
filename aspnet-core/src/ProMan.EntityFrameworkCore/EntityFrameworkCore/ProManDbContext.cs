@@ -15,6 +15,7 @@ namespace ProMan.EntityFrameworkCore
         public DbSet<Task> Tasks { get; set; }
         public DbSet<ProjectUser> ProjectUsers { get; set; }
         public DbSet<CommentTicket> CommentTicketes { get; set; }
+        public DbSet<ColumnStatus> ColumnStatuses { get; set; }
         public ProManDbContext(DbContextOptions<ProManDbContext> options)
             : base(options)
         {

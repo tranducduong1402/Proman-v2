@@ -1,4 +1,5 @@
 ﻿using Abp.Domain.Entities.Auditing;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ProMan.Authorization.Users;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static ProMan.Constants.Enum.StatusEnum;
-using TaskStatus = ProMan.Constants.Enum.StatusEnum.TaskStatus;
 
 namespace ProMan.Entities
 {
@@ -16,7 +16,6 @@ namespace ProMan.Entities
         public string Title { get; set; }
         public string Description { get; set; }
         public TaskType Type { get; set; }
-        public TaskStatus Status { get; set; }
         public PriorityType Priority { get; set; }
 
         [ForeignKey(nameof(UserId))]
@@ -26,5 +25,9 @@ namespace ProMan.Entities
         [ForeignKey(nameof(TicketId))]
         public virtual Ticket Ticket { get; set; }
         public long? TicketId { get; set; }
+
+        [ForeignKey(nameof(ColumnStatusId))]
+        public virtual ColumnStatus ColumnStatus { get; set; }
+        public long? ColumnStatusId { get; set; }
     }
 }

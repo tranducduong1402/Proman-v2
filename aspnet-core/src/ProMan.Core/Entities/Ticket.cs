@@ -14,7 +14,6 @@ namespace ProMan.Entities
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public TicketStatus Status { get; set; }
         public float? TimeTrackingSpent { get; set; }
         public float? TimeTrackingRemaining { get; set; }
         public float? OriginalEstimate { get; set; }
@@ -24,5 +23,9 @@ namespace ProMan.Entities
         [ForeignKey(nameof(ProjectId))]
         public virtual Project Project { get; set; }
         public long? ProjectId { get; set; }
+
+        [ForeignKey(nameof(ColumnStatusId))]
+        public virtual ColumnStatus ColumnStatus { get; set; }
+        public long? ColumnStatusId { get; set; }
     }
 }
