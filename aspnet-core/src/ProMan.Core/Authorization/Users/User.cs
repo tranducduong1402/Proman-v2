@@ -35,5 +35,6 @@ namespace ProMan.Authorization.Users
         }
 
         public Sex? Sex { get; set; }
+        public bool? IsClient { get; set; }
     }
 }

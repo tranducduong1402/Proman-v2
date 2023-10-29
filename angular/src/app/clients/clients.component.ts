@@ -1,21 +1,12 @@
-import { UserService } from './../service/api/user.service';
 import { Component, Injector } from '@angular/core';
-import { finalize } from 'rxjs/operators';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
-import {
-  FilterDto,
-  PagedListingComponentBase,
-  PagedRequestDto
-} from 'shared/paged-listing-component-base';
-import {
-  UserServiceProxy,
-  UserDto,
-  UserDtoPagedResultDto
-} from '@shared/service-proxies/service-proxies';
-import { CreateUserDialogComponent } from './create-user/create-user-dialog.component';
-import { EditUserDialogComponent } from './edit-user/edit-user-dialog.component';
-import { ResetPasswordDialogComponent } from './reset-password/reset-password.component';
+import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
+import { UserDto, UserDtoPagedResultDto, UserServiceProxy } from '@shared/service-proxies/service-proxies';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { finalize } from 'rxjs';
+import { CreateClientComponent } from './create-client/create-client.component';
+import { EditClientComponent } from './edit-client/edit-client.component';
+import { UserService } from '@app/service/api/user.service';
 
 class PagedUsersRequestDto extends PagedRequestDto {
   keyword: string;
@@ -23,10 +14,13 @@ class PagedUsersRequestDto extends PagedRequestDto {
 }
 
 @Component({
-  templateUrl: './users.component.html',
+  //selector: 'app-clients',
+  templateUrl: './clients.component.html',
+  //styleUrls: ['./clients.component.css']
   animations: [appModuleAnimation()]
+
 })
-export class UsersComponent extends PagedListingComponentBase<UserDto> {
+export class ClientsComponent extends PagedListingComponentBase<UserDto> {
   users: UserDto[] = [];
   keyword = '';
   isActive: boolean | null;
@@ -34,7 +28,6 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
 
   public isLoading: boolean = false;
   public inputRequest = {} as PagedRequestDto;
-
 
   constructor(
     injector: Injector,
@@ -51,10 +44,6 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
 
   editUser(user: UserDto): void {
     this.showCreateOrEditUserDialog(user.id);
-  }
-
-  public resetPassword(user: UserDto): void {
-    this.showResetPasswordUserDialog(user.id);
   }
 
   clearFilters(): void {
@@ -77,7 +66,7 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
 
     this.isLoading = true;
     this.userService
-      .getAllUser(this.inputRequest)
+      .getAllClient(this.inputRequest)
       .pipe(finalize(() => {
         finishedCallback();
       }))
@@ -104,27 +93,18 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
     );
   }
 
-  private showResetPasswordUserDialog(id?: number): void {
-    this._modalService.show(ResetPasswordDialogComponent, {
-      class: 'modal-lg',
-      initialState: {
-        id: id,
-      },
-    });
-  }
-
   private showCreateOrEditUserDialog(id?: number): void {
     let createOrEditUserDialog: BsModalRef;
     if (!id) {
       createOrEditUserDialog = this._modalService.show(
-        CreateUserDialogComponent,
+        CreateClientComponent,
         {
           class: 'modal-lg',
         }
       );
     } else {
       createOrEditUserDialog = this._modalService.show(
-        EditUserDialogComponent,
+        EditClientComponent,
         {
           class: 'modal-lg',
           initialState: {

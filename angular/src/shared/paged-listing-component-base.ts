@@ -1,5 +1,6 @@
 import { AppComponentBase } from 'shared/app-component-base';
 import { Component, Injector, OnInit } from '@angular/core';
+import { SortDirectionEnum } from './AppEnums';
 
 export class PagedResultDto {
     items: any[];
@@ -10,9 +11,19 @@ export class EntityDto {
     id: number;
 }
 
+export class FilterDto{
+    propertyName: string;
+    value: any;
+    comparison: number;
+}
+
 export class PagedRequestDto {
     skipCount: number;
     maxResultCount: number;
+    searchText: string;
+    filterItems: FilterDto[] = [];
+    sort: string;
+    sortDirection: number;
 }
 
 @Component({
@@ -25,6 +36,11 @@ export abstract class PagedListingComponentBase<TEntityDto> extends AppComponent
     public totalPages = 1;
     public totalItems: number;
     public isTableLoading = false;
+    public searchText: string = '';
+    public filterItems: FilterDto[] = [];
+    public sortProperty: string = "";
+    public sortDirection: number = null
+    public sortDirectionEnum = SortDirectionEnum
 
     constructor(injector: Injector) {
         super(injector);
