@@ -21,24 +21,10 @@ namespace ProMan.Constants.Enum
             DeActive = 3,
         }
 
-        public enum TicketStatus
-        {
-            Open = 0,
-            InProgress = 1,
-            Done = 2,
-        }
-
         public enum TaskType
         {
             Task = 0,
             Bug = 1,
-        }
-
-        public enum TaskStatus
-        {
-            Open = 0,
-            InProgress = 1,
-            Done = 2,
         }
 
         public enum PriorityType
@@ -53,6 +39,12 @@ namespace ProMan.Constants.Enum
         {
             Male = 0,
             Female = 1
+        }
+
+        public enum ColumnType
+        {
+            Ticket = 0,
+            Task = 1
         }
     }
 }
