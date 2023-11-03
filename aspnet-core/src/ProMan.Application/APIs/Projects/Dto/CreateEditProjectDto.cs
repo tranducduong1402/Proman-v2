@@ -20,7 +20,8 @@ namespace ProMan.APIs.Projects.Dto
         public List<AddUserInProjectDto> Users { get; set; }
     }
 
-    public class AddUserInProjectDto
+    [AutoMapTo(typeof(ProjectUser))]
+    public class AddUserInProjectDto : EntityDto<long>
     {
         public long UserId { get; set; }
         public ProjectUserType Type { get; set; }

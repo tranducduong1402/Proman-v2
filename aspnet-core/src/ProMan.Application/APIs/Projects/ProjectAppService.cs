@@ -1,4 +1,6 @@
-﻿using Abp.UI;
+﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
+using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProMan.APIs.Projects.Dto;
@@ -7,11 +9,9 @@ using ProMan.Context;
 using ProMan.Entities;
 using ProMan.Extension;
 using ProMan.Paging;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using static ProMan.Constants.Enum.StatusEnum;
 
 namespace ProMan.APIs.Projects
 {
@@ -60,6 +60,7 @@ namespace ProMan.APIs.Projects
         [HttpPost]
         public async Task<CreateEditProjectDto> Create(CreateEditProjectDto input)
         {
+            await ValProject(input);
             var project = ObjectMapper.Map<Project>(input);
             input.Id = await Context.GetRepo<Project, long>().InsertAndGetIdAsync(project);
             CurrentUnitOfWork.SaveChanges();
@@ -77,6 +78,108 @@ namespace ProMan.APIs.Projects
             }
 
             return input;
+        }
+
+        [HttpPost]
+        public async Task<CreateEditProjectDto> Edit(CreateEditProjectDto input)
+        {
+            await ValProject(input);
+            var project = await Context.GetAsync<Project>(input.Id);
+            ObjectMapper.Map<CreateEditProjectDto, Project>(input, project);
+            await Context.GetRepo<Project, long>().UpdateAsync(project);
+
+            // projectUser
+            var currentProjectUsers = await Context.GetAll<ProjectUser>()
+                .Where(s => s.ProjectId == input.Id)
+                .ToListAsync();
+
+            var currentUserIds = currentProjectUsers.Select(s => s.UserId).ToList();
+
+            var newUserIds = input.Users.Select(s => s.UserId).ToList();
+
+            var deleteUserIds = currentUserIds.Except(newUserIds);
+
+            var insertUsers = input.Users.Where(s => !currentUserIds.Contains(s.UserId));
+
+            var deleteProjectUserIds = currentProjectUsers
+                .Where(s => !newUserIds.Contains(s.UserId))
+                .Select(s => s.Id)
+                .ToList();
+
+            var updateUsers = (from cpu in currentProjectUsers
+                               join cu in input.Users on cpu.UserId equals cu.UserId
+                               select new
+                               {
+                                   ProjectUser = cpu,
+                                   Dto = cu
+                               }).ToList();
+
+            foreach(var id in deleteProjectUserIds)
+            {
+                await Context.DeleteAsync<ProjectUser>(id);
+            }
+
+            foreach(var pUserDto in insertUsers)
+            {
+                var projectUser = ObjectMapper.Map<ProjectUser>(pUserDto);
+                projectUser.ProjectId = input.Id;
+                await Context.InsertAsync<ProjectUser>(projectUser);
+            }
+
+            foreach(var item in updateUsers)
+            {
+                if(item.Dto.Type != item.ProjectUser.Type)
+                {
+                    item.ProjectUser.Type = item.Dto.Type;
+
+                    await Context.UpdateAsync<ProjectUser>(item.ProjectUser);
+                }
+            }
+            return input;
+        }
+
+        [HttpPost]
+        public async System.Threading.Tasks.Task Deactive(EntityDto<long> input)
+        {
+            var project = await Context.GetAsync<Project>(input.Id);
+            if (project != null)
+            {
+                project.Status = ProjectStatus.Deactive;
+                await Context.GetRepo<Project, long>().UpdateAsync(project);
+            }
+            else
+            {
+                throw new UserFriendlyException(string.Format("Project is not exist"));
+            }
+        }
+
+        [HttpPost]
+        public async System.Threading.Tasks.Task Active(EntityDto<long> input)
+        {
+            var project = await Context.GetAsync<Project>(input.Id);
+            if (project != null)
+            {
+                project.Status = ProjectStatus.Active;
+                await Context.UpdateAsync<Project>(project);
+            }
+            else
+            {
+                throw new UserFriendlyException(string.Format("Project is not exist"));
+            }
+        }
+
+        [HttpDelete]
+        public async System.Threading.Tasks.Task Delete(EntityDto<long> input)
+        {
+            var project = await Context.GetAsync<Project>(input.Id);
+            if (project != null)
+            {
+                await Context.GetRepo<Project, long>().DeleteAsync(input.Id);
+            }
+            else
+            {
+                throw new UserFriendlyException(string.Format("Project is not exist"));
+            }
         }
     }
 }
