@@ -42,6 +42,8 @@ import { ProjectsComponent } from './projects/projects.component';
 import { ClientsComponent } from './clients/clients.component';
 import { CreateClientComponent } from './clients/create-client/create-client.component';
 import { EditClientComponent } from './clients/edit-client/edit-client.component';
+import { CreateProjectComponent } from './projects/create-project/create-project.component';
+import { EditProjectComponent } from './projects/edit-project/edit-project.component';
 
 @NgModule({
     declarations: [
@@ -75,7 +77,9 @@ import { EditClientComponent } from './clients/edit-client/edit-client.component
         ProjectsComponent,
         ClientsComponent,
         CreateClientComponent,
-        EditClientComponent
+        EditClientComponent,
+        CreateProjectComponent,
+        EditProjectComponent
     ],
     imports: [
         CommonModule,
