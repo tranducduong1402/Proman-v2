@@ -1,0 +1,41 @@
+<form class="form-horizontal" autocomplete="off" #createUserModal="ngForm" (ngSubmit)="save()">
+    <abp-modal-header [title]="'Create New Project' | localize" (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
+    <div class="modal-body" style="margin: 0 20 5 20;">
+        <tabset>
+            <tab heading="General">
+                <div class="row row-mar-0 mr-top-20">
+                    <div class="col-md-2 col-sm-2 col-md-2 col-lg-2">
+                      <label>Client*</label>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-md-6 col-lg-6">
+                      
+                    </div>
+                  </div>
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="name">
+                      {{ "Name" | localize }}
+                    </label>
+                    <div class="col-md-9">
+                      <input type="text" class="form-control" name="name" id="name" required maxlength="32" />
+                    </div>
+                  </div>
+                  <div class="form-group row mb-0">
+                    <label class="col-md-3 col-form-label">
+                      {{ "IsActive" | localize }}
+                    </label>
+                    <div class="col-md-9">
+                      <div class="custom-control custom-checkbox">
+                        <label class="custom-control-label mt-2" for="isActive"></label>
+                      </div>
+                    </div>
+                  </div>
+            </tab>
+            <tab heading="Team">
+
+            </tab>
+         </tabset>
+      
+    </div>
+    <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!createUserModal.form.valid || saving"
+      (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
+  </form>
