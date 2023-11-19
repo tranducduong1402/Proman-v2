@@ -28,6 +28,7 @@ using ProMan.APIs.Projects.Dto;
 using ProMan.Entities;
 using ProMan.Context;
 using ProMan.Extension;
+using System.ComponentModel;
 
 namespace ProMan.Users
 {
@@ -326,6 +327,40 @@ namespace ProMan.Users
                 });
 
             return await query.GetGridResult(query, input);
+        }
+
+        [HttpGet]
+        public async Task<List<UserDto>> GetAllClientNotPaging()
+        {
+            return await _context.GetAll<User>()
+                .Where(s => !s.IsDeleted)
+                .Where(s => s.IsClient.Value)
+                .Select(s => new UserDto
+                {
+                    Id = s.Id,
+                    CreationTime = s.CreationTime,
+                    EmailAddress = s.EmailAddress,
+                    FullName = s.FullName,
+                    IsActive = s.IsActive,
+                    Name = s.Name,
+                    Surname = s.Surname,
+                    UserName = s.UserName,
+                }).ToListAsync();
+        }
+
+        [HttpGet]
+        public async Task<List<GetUserDto>> GetAllUserNotPaging()
+        {
+            return await _context.GetAll<User>()
+                .Where(s => !s.IsDeleted)
+                .Where(s => s.IsClient == null || s.IsClient.Value == false)
+                .Select(s => new GetUserDto
+                {
+                    Id = s.Id,
+                    Name = s.FullName,
+                    EmailAddress = s.EmailAddress,
+                    IsActive = s.IsActive,
+                }).ToListAsync();
         }
     }
 }

@@ -18,5 +18,7 @@ namespace ProMan.APIs.Projects.Dto
         public string LastModifierUserName { get; set; }
         public DateTime CreationTime { get; set; }
         public DateTime? LastModifierTime { get; set; }
+        public int CountMember { get; set; }
+        public string ClientEmailAddress { get; set; }
     }
 }

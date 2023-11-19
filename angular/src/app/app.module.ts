@@ -44,6 +44,15 @@ import { CreateClientComponent } from './clients/create-client/create-client.com
 import { EditClientComponent } from './clients/edit-client/edit-client.component';
 import { CreateProjectComponent } from './projects/create-project/create-project.component';
 import { EditProjectComponent } from './projects/edit-project/edit-project.component';
+import {MatSelectModule} from '@angular/material/select';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatNativeDateModule} from '@angular/material/core';
 
 @NgModule({
     declarations: [
@@ -95,7 +104,19 @@ import { EditProjectComponent } from './projects/edit-project/edit-project.compo
         ServiceProxyModule,
         SharedModule,
         NgxPaginationModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatIconModule,
+        MatTabsModule,
+        MatDialogModule,
+        MatDatepickerModule,
+        MatExpansionModule,
+        MatNativeDateModule
     ],
-    providers: []
+    providers: [
+        MatDatepickerModule,
+    ],
+    entryComponents:[CreateProjectComponent],
 })
 export class AppModule {}

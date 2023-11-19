@@ -28,5 +28,9 @@ import { Observable } from "rxjs";
     delete(id: number): Observable<any> {
       return this.http.delete(this.rootUrl + `/Delete?id=${id}`);
     }
+
+    getOneProject(id: number): Observable<any> {
+      return this.http.get(this.rootUrl + `/GetOneProject?id=${id}`);
+    }
   }
   
