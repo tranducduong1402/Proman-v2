@@ -1,41 +1,226 @@
 <form class="form-horizontal" autocomplete="off" #createUserModal="ngForm" (ngSubmit)="save()">
-    <abp-modal-header [title]="'Create New Project' | localize" (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
-    <div class="modal-body" style="margin: 0 20 5 20;">
-        <tabset>
-            <tab heading="General">
-                <div class="row row-mar-0 mr-top-20">
-                    <div class="col-md-2 col-sm-2 col-md-2 col-lg-2">
-                      <label>Client*</label>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-md-6 col-lg-6">
-                      
-                    </div>
+  <div class="modal-body" style="margin: 0 20 5 20;">
+    <h2 style="cursor: grab;" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>{{title}} {{ project.id > 0 ?
+      project.name : ''}}</h2>
+    <hr>
+    <mat-dialog-content class="tab-modal">
+      <tabset>
+        <tab [heading]="'Project Detail' | localize" class="pt-3 px-2">
+          <div class="m-t-10">
+            <div class="form-group row required">
+              <label class="col-md-3 col-form-label" for="client">
+                {{ "Client Name" | localize }}
+              </label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" name="client" id="client" required [(ngModel)]="project.customerId"
+                  #clientModel="ngModel" #clientEl />
+                <abp-validation-summary [control]="clientModel" [controlEl]="clientEl"></abp-validation-summary>
+              </div>
+            </div>
+            <div class="form-group row required">
+              <label class="col-md-3 col-form-label" for="name">
+                {{ "Project Name" | localize }}
+              </label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" name="name" id="name" required [(ngModel)]="project.name"
+                  #nameModel="ngModel" #nameEl />
+                <abp-validation-summary [control]="nameModel" [controlEl]="nameEl"></abp-validation-summary>
+              </div>
+            </div>
+            <div class="form-group row required">
+              <label class="col-md-3 col-form-label" for="note">
+                {{ "Project Note" | localize }}
+              </label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" name="note" id="note" required [(ngModel)]="project.note"
+                  #noteModel="ngModel" #noteEl />
+                <abp-validation-summary [control]="noteModel" [controlEl]="noteEl"></abp-validation-summary>
+              </div>
+            </div>
+            <div class="form-group row required">
+              <label class="col-md-3 col-form-label" for="code">
+                {{ "Project Code" | localize }}
+              </label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" name="code" id="code" required [(ngModel)]="project.code"
+                  #codeModel="ngModel" #codeEl />
+                <abp-validation-summary [control]="codeModel" [controlEl]="codeEl"></abp-validation-summary>
+              </div>
+            </div>
+            <!-- <div class="form-group row required">
+              <label class="col-md-3 col-form-label" for="code">
+                {{ "Date" | localize }}
+              </label>
+              <div class="col-md-9">
+                <div *ngIf="projectTimeStart.errors && (projectTimeStart.dirty || projectTimeStart.touched)"
+                  class="text-danger">
+                  <div [hidden]="!projectTimeStart.errors.required">
+                    Time start is required!
                   </div>
-                <div class="form-group row required">
-                    <label class="col-md-3 col-form-label" for="name">
-                      {{ "Name" | localize }}
-                    </label>
-                    <div class="col-md-9">
-                      <input type="text" class="form-control" name="name" id="name" required maxlength="32" />
-                    </div>
+                </div>
+                <div *ngIf="projectTimeEnd.errors && (projectTimeEnd.dirty || projectTimeEnd.touched)"
+                  class="text-danger">
+                  <div [hidden]="!projectTimeEnd.errors.required">
+                    Time end is required!
                   </div>
-                  <div class="form-group row mb-0">
-                    <label class="col-md-3 col-form-label">
-                      {{ "IsActive" | localize }}
-                    </label>
-                    <div class="col-md-9">
-                      <div class="custom-control custom-checkbox">
-                        <label class="custom-control-label mt-2" for="isActive"></label>
-                      </div>
-                    </div>
+                </div>
+                <div class="inline">
+                  <mat-form-field appearance="outline">
+                    <input matInput name="timeStart" [(ngModel)]="project.timeStart" [matDatepicker]="picker"
+                      placeholder="Start at" #projectTimeStart="ngModel">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <span> to </span>
+                <div class="inline">
+                  <mat-form-field appearance="outline">
+                    <input matInput name="timeEnd" [(ngModel)]="project.timeEnd" [matDatepicker]="pick"
+                      placeholder="End at" #projectTimeEnd="ngModel">
+                    <mat-datepicker-toggle matSuffix [for]="pick"></mat-datepicker-toggle>
+                    <mat-datepicker #pick></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div> -->
+          </div>
+        </tab>
+        <tab [heading]="'Team' | localize" class="pt-3 px-2">
+          <div style="display:flex;">
+            <div [ngClass]="isShowTeamMember ? 'table-team-selected' : 'full-width'">
+              <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header style="height: 50px;">
+                  <mat-panel-title align="center">
+                    <strong>Selected member</strong>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="row-fluid" style="margin-top: -15px;">
+                  <div class="col-md-4 c-12 pl-0">
+                    <mat-form-field>
+                      <input type="text" matInput placeholder="Search by name, email"
+                        [(ngModel)]="searchProjectMemberText" name="searchMember" (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()" (keyup)="filterProjectMember();$event.stopPropagation()">
+                    </mat-form-field>
                   </div>
-            </tab>
-            <tab heading="Team">
-
-            </tab>
-         </tabset>
-      
-    </div>
-    <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!createUserModal.form.valid || saving"
-      (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
-  </form>
+                  <div class="col-md-2 c-12 pl-0 show-member">
+                    <button name="isShowMember" mat-raised-button color="primary" type="button"
+                      (click)="showTeamMember(); $event.stopPropagation()">
+                      {{isShowTeamMember ? "Exit add" : "Add users"}}
+                    </button>
+                  </div>
+                </div>
+  
+                <div class="mat-dialog-content list-project-member">
+                  <table class="table table-hover table-striped list-user">
+                    <tr *ngFor="let member of displayProjectMembers; let i = index">
+                      <td style="display: flex; width: 100%;">
+                        <button type="button" [name]="'leftRemoveBtn-'+member.userId" (click)="removeMemberFromProject(member, i)" mat-icon-button>
+                          <mat-icon>clear</mat-icon>
+                        </button>
+                        <div class="user-infor" style="display: flex;">
+                          <div style="display: flex;">
+                            <div style="margin-left: 10px;">
+                              <p style="margin-bottom: 5px; margin-top: 5px;">
+                                <strong style="margin-right: 5px;">{{member.name}}</strong>
+                                <span class="label status-label"
+                                  [style.backgroundColor]="member.branchColor">{{member.branchDisplayName}}</span>
+                              </p>
+                              <p>
+                                <span>{{member.emailAddress}}</span>
+                                <span style="margin-left: 10px;font-weight: bold;" *ngIf="member.isActive == false">
+                                  [Inactive]
+                                </span>
+                              </p>
+                            </div>
+  
+                          </div>
+                        </div>
+                      </td>
+                      <td class="w-30vw">
+                        <mat-form-field style="width: 90px;margin-right: 10px;">
+                          <mat-select [name]="'userTypeBtn-'+member.userId" matInput [(ngModel)]="member.ptype"
+                          [ngModelOptions]="{standalone: true}" required>
+                          <mat-option  >
+                            CHECK 1
+                          </mat-option>
+                          <mat-option  >
+                            CHECK 3
+                          </mat-option>
+                          <mat-option>
+                            CHECK 2
+                          </mat-option>
+                        </mat-select>
+                        </mat-form-field>
+                      </td>
+                      <td class="w-30vw">
+                      </td>
+                      <td>
+                        <button [name]="'rightRemoveBtn-'+member.userId" (click)="removeMemberFromProject(member, i)" type="button" mat-icon-button>
+                          <i class="fa-solid fa-angle-right" style="font-size: 20px;"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </mat-expansion-panel>
+            </div>
+            <div *ngIf="isShowTeamMember" class="table-team-select">
+              <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header style="height: 50px;">
+                  <mat-panel-title align="center">
+                    <strong>Select team member</strong>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+  
+                <div class="row-fluid" style="margin-top: -15px;">
+                  <div class="col-md-3">
+                    <mat-form-field>
+                      <mat-label>Type</mat-label>
+                      <mat-select name="type" (value)='userTypeForFilter' (selectionChange)="searchMember()">
+                        <mat-option value="-1">All</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <input type="text" matInput placeholder="Search by name, email" [(ngModel)]="searchMemberText"
+                        name="searchMember" (keyup)="searchMember()">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="mat-dialog-content list-member">
+                  <table class="table table-hover table-striped list-user">
+                    <tr *ngFor="let mem of displayActiveMembers; let i = index">
+                      <td (click)="selectTeam(mem, i)" style="display: flex;">
+                        <button [name]="'addBtn-'+mem.id" type="button" mat-icon-button>
+                          <i class="fa-solid fa-angle-left" style="font-size: 20px;"></i>
+                        </button>
+                        <div class="user-infor" style="display: flex;">
+                          <div style="display: flex;">
+                            <div style="margin-left: 10px;">
+                              <p style="margin-bottom: 5px; margin-top: 5px;">
+                                <strong style="margin-right: 5px;">{{mem.name}}</strong>
+                                
+                                  <span style="margin-left: 10px;font-weight: bold;" *ngIf="mem.isActive == false">
+                                    [Inactive]
+                                  </span>
+                              </p>
+                              <p><span>{{mem.emailAddress}}</span></p>
+                            </div>
+  
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </mat-expansion-panel>
+            </div>
+          </div>
+        </tab>
+      </tabset>
+    </mat-dialog-content>
+  </div>
+  <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!createUserModal.form.valid || saving"
+    (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
+</form>

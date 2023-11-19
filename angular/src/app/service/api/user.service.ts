@@ -28,5 +28,13 @@ import { Observable } from "rxjs";
     createClient(request): Observable<any> {
         return this.http.post(this.rootUrl + "/CreateClient?", request);
     }
+
+    getAllClientNotPaging(): Observable<any> {
+      return this.http.get(this.rootUrl + "/GetAllClientNotPaging");
+    }
+
+    getAllUserNotPaging(): Observable<any> {
+      return this.http.get(this.rootUrl + "/GetAllUserNotPaging");
+    }
   }
   

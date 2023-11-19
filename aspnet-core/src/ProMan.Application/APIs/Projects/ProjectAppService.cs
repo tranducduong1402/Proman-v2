@@ -29,6 +29,10 @@ namespace ProMan.APIs.Projects
                                         s.FullName,
                                     }).ToDictionary(s => s.Id, s => s.FullName);
 
+            var dicProjectIdToCountUser = Context.GetAll<ProjectUser>()
+                .GroupBy(s => s.ProjectId)
+                .ToDictionary(s => s.Key, s => s.Select(x => x.UserId).Count());
+
             var query = Context.GetAll<Project>()
                 .Where(s => !s.IsDeleted)
                 .Select(s => new GetProjectDto
@@ -42,6 +46,8 @@ namespace ProMan.APIs.Projects
                     CreationTime = s.CreationTime,
                     CreatedUserName = (s.CreatorUserId.HasValue && dicUsers.ContainsKey(s.CreatorUserId.Value)) ? dicUsers[s.CreatorUserId.Value] : "",
                     LastModifierUserName = (s.LastModifierUserId.HasValue && dicUsers.ContainsKey(s.LastModifierUserId.Value)) ? dicUsers[s.LastModifierUserId.Value] : "",
+                    CountMember = dicProjectIdToCountUser[s.Id],
+                    ClientEmailAddress = s.Customer.EmailAddress
                 });
 
             return await query.GetGridResult(query, input);
@@ -180,6 +186,33 @@ namespace ProMan.APIs.Projects
             {
                 throw new UserFriendlyException(string.Format("Project is not exist"));
             }
+        }
+
+        [HttpGet]
+        public async Task<GetProjectDto> GetOneProject(long id)
+        {
+            var dicUsers = Context.GetAll<User>()
+                                    .Select(s => new
+                                    {
+                                        s.Id,
+                                        s.FullName,
+                                    }).ToDictionary(s => s.Id, s => s.FullName);
+
+            return await Context.GetAll<Project>()
+                .Where(s => s.Id == id)
+                .Where(s => !s.IsDeleted)
+                .Select(s => new GetProjectDto
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    Status = s.Status,
+                    StartDate = s.StartDate,
+                    EndDate = s.EndDate,
+                    LastModifierTime = s.LastModificationTime,
+                    CreationTime = s.CreationTime,
+                    CreatedUserName = (s.CreatorUserId.HasValue && dicUsers.ContainsKey(s.CreatorUserId.Value)) ? dicUsers[s.CreatorUserId.Value] : "",
+                    LastModifierUserName = (s.LastModifierUserId.HasValue && dicUsers.ContainsKey(s.LastModifierUserId.Value)) ? dicUsers[s.LastModifierUserId.Value] : "",
+                }).FirstOrDefaultAsync();
         }
     }
 }
