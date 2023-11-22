@@ -7,6 +7,7 @@ import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { finalize } from 'rxjs';
+import * as moment from 'moment';
 
 class PagedUsersRequestDto extends PagedRequestDto {
   keyword: string;
@@ -122,6 +123,10 @@ export class ProjectsComponent extends PagedListingComponentBase<ProjectDto> {
     createOrEditProjectDialog.content.onSave.subscribe(() => {
       this.refresh();
     });
+  }
+
+  formatDate(time): string {
+    return moment(time).format("DD/MM/YYYY");
   }
 }
 
