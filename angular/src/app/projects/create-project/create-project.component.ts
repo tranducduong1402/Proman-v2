@@ -43,6 +43,12 @@ implements OnInit {
   defaultRoleCheckedStatus = false;
   respone = 0;
 
+  userTypes = [
+    { value: 0, label: "Member" },
+    { value: 1, label: "PM" },
+    { value: 3, label: "DeActive" }
+  ];
+
   constructor(
     injector: Injector,
     public bsModalRef: BsModalRef,
@@ -271,6 +277,10 @@ implements OnInit {
       this.listCustomer = this.listCustomerFilter.slice();
     }
   }
+
+  changeCustomer(value: any) {
+
+  }
 }
 
 export class CreateProjectDto {
@@ -280,8 +290,8 @@ export class CreateProjectDto {
   code: string;
   note: string;
   isActive: boolean;
-  timeStart: Date;
-  timeEnd: Date;
+  startDate: Date;
+  endDate: Date;
 }
 
 export class CustomerDto {
@@ -318,8 +328,8 @@ export interface ProjectDto {
   code: string;
   status: number;
   note: string;
-  timeStart: Date;
-  timeEnd: Date;
+  startDate: Date;
+  endDate: Date;
   customerId: number;
   users: UserProjectDto[];
 }

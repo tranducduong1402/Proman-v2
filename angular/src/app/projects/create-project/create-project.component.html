@@ -8,13 +8,15 @@
         <tab [heading]="'Project Detail' | localize" class="pt-3 px-2">
           <div class="m-t-10">
             <div class="form-group row required">
-              <label class="col-md-3 col-form-label" for="client">
+              <label class="col-md-3 col-form-label" for="projectId">
                 {{ "Client Name" | localize }}
               </label>
               <div class="col-md-9">
-                <input type="text" class="form-control" name="client" id="client" required [(ngModel)]="project.customerId"
-                  #clientModel="ngModel" #clientEl />
-                <abp-validation-summary [control]="clientModel" [controlEl]="clientEl"></abp-validation-summary>
+                <select name="clientId" (change)="changeCustomer($event)" class="form-control" id="clientId" required
+                  [(ngModel)]="project.customerId" #clientIdModel="ngModel" #clientIdEl>
+                  <option [value]="client.id" *ngFor="let client of listCustomer">{{ client.name }}</option>
+                </select>
+                <abp-validation-summary [control]="clientIdModel" [controlEl]="clientIdEl"></abp-validation-summary>
               </div>
             </div>
             <div class="form-group row required">
@@ -47,42 +49,27 @@
                 <abp-validation-summary [control]="codeModel" [controlEl]="codeEl"></abp-validation-summary>
               </div>
             </div>
-            <!-- <div class="form-group row required">
+            <div class="form-group row required">
               <label class="col-md-3 col-form-label" for="code">
                 {{ "Date" | localize }}
               </label>
-              <div class="col-md-9">
-                <div *ngIf="projectTimeStart.errors && (projectTimeStart.dirty || projectTimeStart.touched)"
-                  class="text-danger">
-                  <div [hidden]="!projectTimeStart.errors.required">
-                    Time start is required!
+              <div class="col-md-9" style="display: flex; align-items: center;">
+                <div class="col-md-6" style="display: flex; align-items: center;">
+                  <div class="col-md-4">From</div>
+                  <div class="col-md-8">
+                    <input type="date" class="form-control" name="startDate" id="startDate" required
+                      [(ngModel)]="project.startDate" #startDateModel="ngModel" #startDateEl />
                   </div>
                 </div>
-                <div *ngIf="projectTimeEnd.errors && (projectTimeEnd.dirty || projectTimeEnd.touched)"
-                  class="text-danger">
-                  <div [hidden]="!projectTimeEnd.errors.required">
-                    Time end is required!
+                <div class="col-md-6" style="display: flex; align-items: center;">
+                  <div class="col-md-4">To</div>
+                  <div class="col-md-8">
+                    <input type="date" class="form-control" name="endDate" id="endDate" required
+                      [(ngModel)]="project.endDate" #endDateModel="ngModel" #endDateEl />
                   </div>
-                </div>
-                <div class="inline">
-                  <mat-form-field appearance="outline">
-                    <input matInput name="timeStart" [(ngModel)]="project.timeStart" [matDatepicker]="picker"
-                      placeholder="Start at" #projectTimeStart="ngModel">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>
-                </div>
-                <span> to </span>
-                <div class="inline">
-                  <mat-form-field appearance="outline">
-                    <input matInput name="timeEnd" [(ngModel)]="project.timeEnd" [matDatepicker]="pick"
-                      placeholder="End at" #projectTimeEnd="ngModel">
-                    <mat-datepicker-toggle matSuffix [for]="pick"></mat-datepicker-toggle>
-                    <mat-datepicker #pick></mat-datepicker>
-                  </mat-form-field>
                 </div>
               </div>
-            </div> -->
+            </div>
           </div>
         </tab>
         <tab [heading]="'Team' | localize" class="pt-3 px-2">
@@ -109,12 +96,13 @@
                     </button>
                   </div>
                 </div>
-  
+
                 <div class="mat-dialog-content list-project-member">
                   <table class="table table-hover table-striped list-user">
                     <tr *ngFor="let member of displayProjectMembers; let i = index">
                       <td style="display: flex; width: 100%;">
-                        <button type="button" [name]="'leftRemoveBtn-'+member.userId" (click)="removeMemberFromProject(member, i)" mat-icon-button>
+                        <button type="button" [name]="'leftRemoveBtn-'+member.userId"
+                          (click)="removeMemberFromProject(member, i)" mat-icon-button>
                           <mat-icon>clear</mat-icon>
                         </button>
                         <div class="user-infor" style="display: flex;">
@@ -122,40 +110,37 @@
                             <div style="margin-left: 10px;">
                               <p style="margin-bottom: 5px; margin-top: 5px;">
                                 <strong style="margin-right: 5px;">{{member.name}}</strong>
-                                <span class="label status-label"
-                                  [style.backgroundColor]="member.branchColor">{{member.branchDisplayName}}</span>
                               </p>
                               <p>
                                 <span>{{member.emailAddress}}</span>
-                                <span style="margin-left: 10px;font-weight: bold;" *ngIf="member.isActive == false">
+                                <!-- <span style="margin-left: 10px;font-weight: bold;" *ngIf="member.isActive == false">
                                   [Inactive]
-                                </span>
+                                </span> -->
                               </p>
                             </div>
-  
+
                           </div>
                         </div>
                       </td>
                       <td class="w-30vw">
-                        <mat-form-field style="width: 90px;margin-right: 10px;">
-                          <mat-select [name]="'userTypeBtn-'+member.userId" matInput [(ngModel)]="member.ptype"
-                          [ngModelOptions]="{standalone: true}" required>
-                          <mat-option  >
-                            CHECK 1
-                          </mat-option>
-                          <mat-option  >
-                            CHECK 3
-                          </mat-option>
-                          <mat-option>
-                            CHECK 2
-                          </mat-option>
-                        </mat-select>
-                        </mat-form-field>
+                          <select [name]="'userTypeBtn-'+member.userId" matInput [(ngModel)]="member.ptype"
+                            [ngModelOptions]="{standalone: true}" required>
+                            <option [value]=0>
+                              Member
+                            </option>
+                            <option [value]=1>
+                              PM
+                            </option>
+                            <option [value]=3>
+                              DeActive
+                            </option>
+                          </select>
                       </td>
                       <td class="w-30vw">
                       </td>
                       <td>
-                        <button [name]="'rightRemoveBtn-'+member.userId" (click)="removeMemberFromProject(member, i)" type="button" mat-icon-button>
+                        <button [name]="'rightRemoveBtn-'+member.userId" (click)="removeMemberFromProject(member, i)"
+                          type="button" mat-icon-button>
                           <i class="fa-solid fa-angle-right" style="font-size: 20px;"></i>
                         </button>
                       </td>
@@ -171,7 +156,7 @@
                     <strong>Select team member</strong>
                   </mat-panel-title>
                 </mat-expansion-panel-header>
-  
+
                 <div class="row-fluid" style="margin-top: -15px;">
                   <div class="col-md-3">
                     <mat-form-field>
@@ -200,14 +185,14 @@
                             <div style="margin-left: 10px;">
                               <p style="margin-bottom: 5px; margin-top: 5px;">
                                 <strong style="margin-right: 5px;">{{mem.name}}</strong>
-                                
-                                  <span style="margin-left: 10px;font-weight: bold;" *ngIf="mem.isActive == false">
-                                    [Inactive]
-                                  </span>
+
+                                <span style="margin-left: 10px;font-weight: bold;" *ngIf="mem.isActive == false">
+                                  [Inactive]
+                                </span>
                               </p>
                               <p><span>{{mem.emailAddress}}</span></p>
                             </div>
-  
+
                           </div>
                         </div>
                       </td>
