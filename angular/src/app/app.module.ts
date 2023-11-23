@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientJsonpModule } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -54,6 +54,26 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatNativeDateModule} from '@angular/material/core';
 
+import { FormsModule } from '@angular/forms';
+import { TicketsComponent } from './tickets/tickets.component';
+import { CreateTicketComponent } from './tickets/create-ticket/create-ticket.component';
+import { EditTicketComponent } from './tickets/edit-ticket/edit-ticket.component';
+import { ProgressTicketComponent } from './tickets/progress-ticket/progress-ticket.component';
+import { TaksComponent } from './Tasks/tasks.component';
+import { CreateTaskComponent } from './Tasks/create-task/create-task.component';
+import { EditTaskComponent } from './Tasks/edit-task/edit-task.component';
+import { ProgressTaskComponent } from './Tasks/progress-task/progress-task.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ColumnStatusesComponent } from './column-status/column-statuses.component';
+import { CreateColumnStatusComponent } from './column-status/create-column-status/create-column-status.component';
+import { EditColumnStatusComponent } from './column-status/edit-column-status/edit-column-status.component';
+import {
+    CdkDragDrop,
+    moveItemInArray,
+    transferArrayItem,
+    CdkDrag,
+    CdkDropList,
+  } from '@angular/cdk/drag-drop';
 @NgModule({
     declarations: [
         AppComponent,
@@ -73,6 +93,7 @@ import {MatNativeDateModule} from '@angular/material/core';
         EditUserDialogComponent,
         ChangePasswordComponent,
         ResetPasswordDialogComponent,
+
         // layout
         HeaderComponent,
         HeaderLeftNavbarComponent,
@@ -88,9 +109,30 @@ import {MatNativeDateModule} from '@angular/material/core';
         CreateClientComponent,
         EditClientComponent,
         CreateProjectComponent,
-        EditProjectComponent
+        EditProjectComponent,
+        
+        //ticket
+        TicketsComponent,
+        CreateTicketComponent,
+        EditTicketComponent,
+        ProgressTicketComponent,
+
+        //task
+        TaksComponent,
+        CreateTaskComponent,
+        EditTaskComponent,
+        ProgressTaskComponent,
+
+        // column status
+        ColumnStatusesComponent,
+        CreateColumnStatusComponent,
+        EditColumnStatusComponent,
+
     ],
     imports: [
+        CdkDrag,
+        CdkDropList,
+        DragDropModule,
         CommonModule,
         FormsModule,
         ReactiveFormsModule,

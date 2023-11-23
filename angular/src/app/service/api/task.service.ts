@@ -9,32 +9,37 @@ import { Observable } from "rxjs";
     providedIn: 'root'
   })
 
-  export class ProjectService extends BaseApiService{
+  export class TaskService extends BaseApiService{
     constructor(http: HttpClient) {
       super(http);
     }
   
     changeUrl() {
-      return 'Project';
+      return 'task';
     }
   
     getAllPaging(request): Observable<any> {
       return this.http.post(this.rootUrl + "/GetAllPaging?", request);
     }
-    createProject(request): Observable<any> {
+    createTask(request): Observable<any> {
       return this.http.post(this.rootUrl + "/Create?", request);
+    }
+
+    updateTask(request): Observable<any> {
+      return this.http.post(this.rootUrl + "/Edit?", request);
     }
 
     delete(id: number): Observable<any> {
       return this.http.delete(this.rootUrl + `/Delete?id=${id}`);
     }
 
-    getOneProject(id: number): Observable<any> {
-      return this.http.get(this.rootUrl + `/GetOneProject?id=${id}`);
+    getOneTask(id: number): Observable<any> {
+      return this.http.get(this.rootUrl + `/GetOneTask?id=${id}`);
     }
 
-    getAllProjectNotPaging(): Observable<any> {
-      return this.http.get(this.rootUrl + "/GetAllProjectNotPaging");
+    getAllTaskNotPaging(): Observable<any> {
+      return this.http.get(this.rootUrl + "/GetAllTaskNotPaging");
     }
+
   }
   

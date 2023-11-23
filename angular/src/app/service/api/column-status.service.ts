@@ -9,32 +9,40 @@ import { Observable } from "rxjs";
     providedIn: 'root'
   })
 
-  export class ProjectService extends BaseApiService{
+  export class ColumnStatusService extends BaseApiService{
     constructor(http: HttpClient) {
       super(http);
     }
   
     changeUrl() {
-      return 'Project';
+      return 'ColumnStatus';
     }
   
     getAllPaging(request): Observable<any> {
       return this.http.post(this.rootUrl + "/GetAllPaging?", request);
     }
-    createProject(request): Observable<any> {
+    createColumnStatus(request): Observable<any> {
       return this.http.post(this.rootUrl + "/Create?", request);
+    }
+
+    updateColumnStatus(request): Observable<any> {
+      return this.http.post(this.rootUrl + "/Edit?", request);
     }
 
     delete(id: number): Observable<any> {
       return this.http.delete(this.rootUrl + `/Delete?id=${id}`);
     }
 
-    getOneProject(id: number): Observable<any> {
-      return this.http.get(this.rootUrl + `/GetOneProject?id=${id}`);
+    getOneColumnStatus(id: number): Observable<any> {
+      return this.http.get(this.rootUrl + `/GetOneColumnStatus?id=${id}`);
     }
 
-    getAllProjectNotPaging(): Observable<any> {
-      return this.http.get(this.rootUrl + "/GetAllProjectNotPaging");
+    getAllColumnStatusTicketNotPaging(): Observable<any> {
+      return this.http.get(this.rootUrl + "/getAllColumnStatusTicketNotPaging");
+    }
+
+    getAllColumnStatusTaskNotPaging(): Observable<any> {
+      return this.http.get(this.rootUrl + "/getAllColumnStatusTaskNotPaging");
     }
   }
   

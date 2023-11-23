@@ -10,6 +10,10 @@ export const APP_CONSTANT = {
         Shadow: 2,
         DeActive: 3
     },
+    EnumColumnStatus: {
+        Ticket: 0,
+        Task: 1,
+    },
     EnumTypeOfWork: {
         All: -1,
         Normalworkinghours: 0,

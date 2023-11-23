@@ -60,19 +60,55 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
             new MenuItem(
                 this.l('Users'),
                 '/app/users',
-                'fas fa-users',
+                'fas fa-user-tie',
                 'Pages.Users'
             ),
             new MenuItem(
                 this.l('Projects'),
                 '/app/projects',
-                'fa-solid fa-tarp',
+                'fas fa-tarp',
+                ''
+            ),
+            new MenuItem(
+                this.l('Progress Tickets'),
+                '/app/progress-ticket',
+                'fas fa-list-check',
+                ''
+            ),
+            // new MenuItem(
+            //     this.l('Progress Tickets 2'),
+            //     '/app/progress-ticket-2',
+            //     'fas fa-users',
+            //     ''
+            // ),
+            new MenuItem(
+                this.l('Tickets'),
+                '/app/tickets',
+                'fas fa-ticket',
+                ''
+            ),
+            new MenuItem(
+                this.l('Progress Tasks'),
+                '/app/progress-task',
+                'fas fa-list-check',
+                ''
+            ),
+            new MenuItem(
+                this.l('Tasks'),
+                '/app/tasks',
+                'fas fa-boxes-stacked',
+                ''
+            ),
+            new MenuItem(
+                this.l('Column-Status'),
+                '/app/column-status',
+                'fas fa-bars-progress',
                 ''
             ),
             new MenuItem(
                 this.l('Clients'),
                 '/app/clients',
-                'fa-solid fa-elevator',
+                'fas fa-user-tie',
                 ''
             ),
         ];

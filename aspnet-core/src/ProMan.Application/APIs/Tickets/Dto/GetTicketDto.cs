@@ -23,6 +23,8 @@ namespace ProMan.APIs.Tickets.Dto
         public DateTime EndDate { get; set; }
         public long? ProjectId { get; set; }
         public long? ColumnStatusId { get; set; }
+        public string projectName { get; set; }
+        public string columnStatusName { get; set; }
         public DateTime? LastModifierTime { get; set; }
         public DateTime CreationTime { get; set; }
         public string CreatedUserName { get; set; }
