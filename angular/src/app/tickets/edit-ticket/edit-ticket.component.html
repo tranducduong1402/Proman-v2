@@ -1,0 +1,66 @@
+<form class="form-horizontal" autocomplete="off" #editUserModal="ngForm" (ngSubmit)="save()">
+  <abp-modal-header [title]="'Edit Ticket' | localize" (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
+  <div class="modal-body" style="margin: 0 20 5 20;">
+    <hr>
+    <mat-dialog-content class="tab-modal">
+      <tabset>
+        <tab [heading]="'Ticket Detail' | localize" class="pt-3 px-2">
+          <div class="m-t-10">
+            <div class="form-group row required">
+              <label class="col-md-3 col-form-label" for="title">
+                {{ "Ticket-Title" | localize }}
+              </label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" name="title" id="title" required [(ngModel)]="ticket.title"
+                  #titleModel="ngModel" #titleEl />
+                <abp-validation-summary [control]="titleModel" [controlEl]="titleEl"></abp-validation-summary>
+              </div>
+            </div>
+            <div class="form-group row required">
+              <label class="col-md-3 col-form-label" for="description">
+                {{ "Ticket-Description" | localize }}
+              </label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" name="description" id="description" required [(ngModel)]="ticket.description"
+                  #descriptionModel="ngModel" #descriptionEl />
+                <abp-validation-summary [control]="descriptionModel" [controlEl]="descriptionEl"></abp-validation-summary>
+              </div>
+            </div>
+            <div class="form-group row required">
+              <label class="col-md-3 col-form-label" for="projectId">
+                {{ "Ticket-Project-Name" | localize }}
+              </label>
+              <div class="col-md-9">
+                <!-- <input type="text" class="form-control" name="projectId" id="projectId" required [(ngModel)]="ticket.projectId"
+                  #projectIdModel="ngModel" #projectIdEl />
+                <abp-validation-summary [control]="projectIdModel" [controlEl]="projectIdEl"></abp-validation-summary> -->
+                <select name="projectId" (change)="changeProject($event)" class="form-control" id="projectId" required [(ngModel)]="ticket.projectId"  #projectIdModel="ngModel" #projectIdEl>
+                  <option>--Select--</option>
+                  <option [value]="pro.id" *ngFor="let pro of projectList">{{ pro.name }}</option>
+                </select>
+                <abp-validation-summary [control]="projectIdModel" [controlEl]="projectIdEl"></abp-validation-summary>
+              </div>
+            </div>
+            <div class="form-group row required">
+              <label class="col-md-3 col-form-label" for="columnStatusId">
+                {{ "Ticket-ColumnStatus-Name" | localize }}
+              </label>
+              <div class="col-md-9">
+                <!-- <input type="number" class="form-control" name="columnStatusId" id="columnStatusId" required [(ngModel)]="ticket.columnStatusId"
+                  #columnStatusIdModel="ngModel" #columnStatusIdEl />
+                <abp-validation-summary [control]="columnStatusIdModel" [controlEl]="columnStatusIdEl"></abp-validation-summary> -->
+                <select name="columnStatusId" (change)="changeColumnStatus($event)" class="form-control" id="columnStatusId" required [(ngModel)]="ticket.columnStatusId" #columnStatusIdModel="ngModel" #columnStatusIdEl>
+                  <option>--Select--</option>
+                  <option [value]="cs.id" *ngFor="let cs of columnStatusList" >{{ cs.name }}</option>
+                </select>
+                <abp-validation-summary [control]="columnStatusIdModel" [controlEl]="columnStatusIdEl"></abp-validation-summary>
+              </div>
+            </div>
+          </div>
+        </tab>
+      </tabset>
+    </mat-dialog-content>
+  </div>
+  <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!editUserModal.form.valid || saving"
+    (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
+</form>

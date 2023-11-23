@@ -9,32 +9,37 @@ import { Observable } from "rxjs";
     providedIn: 'root'
   })
 
-  export class ProjectService extends BaseApiService{
+  export class TicketService extends BaseApiService{
     constructor(http: HttpClient) {
       super(http);
     }
   
     changeUrl() {
-      return 'Project';
+      return 'ticket';
     }
   
     getAllPaging(request): Observable<any> {
       return this.http.post(this.rootUrl + "/GetAllPaging?", request);
     }
-    createProject(request): Observable<any> {
+    createTicket(request): Observable<any> {
       return this.http.post(this.rootUrl + "/Create?", request);
+    }
+
+    updateTicket(request): Observable<any> {
+      return this.http.post(this.rootUrl + "/Edit?", request);
     }
 
     delete(id: number): Observable<any> {
       return this.http.delete(this.rootUrl + `/Delete?id=${id}`);
     }
 
-    getOneProject(id: number): Observable<any> {
-      return this.http.get(this.rootUrl + `/GetOneProject?id=${id}`);
+    getOneTicket(id: number): Observable<any> {
+      return this.http.get(this.rootUrl + `/GetOneTicket?id=${id}`);
     }
 
-    getAllProjectNotPaging(): Observable<any> {
-      return this.http.get(this.rootUrl + "/GetAllProjectNotPaging");
+    getAllTicketNotPaging(): Observable<any> {
+      return this.http.get(this.rootUrl + "/GetAllTicketNotPaging");
     }
+
   }
   

@@ -3,12 +3,14 @@ using Abp.Authorization;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProMan.APIs.ColumnStatuses.Dto;
 using ProMan.APIs.Projects.Dto;
 using ProMan.Authorization.Users;
 using ProMan.Context;
 using ProMan.Entities;
 using ProMan.Extension;
 using ProMan.Paging;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static ProMan.Constants.Enum.StatusEnum;
@@ -213,6 +215,21 @@ namespace ProMan.APIs.Projects
                     CreatedUserName = (s.CreatorUserId.HasValue && dicUsers.ContainsKey(s.CreatorUserId.Value)) ? dicUsers[s.CreatorUserId.Value] : "",
                     LastModifierUserName = (s.LastModifierUserId.HasValue && dicUsers.ContainsKey(s.LastModifierUserId.Value)) ? dicUsers[s.LastModifierUserId.Value] : "",
                 }).FirstOrDefaultAsync();
+        }
+
+        [HttpGet]
+        public async Task<List<GetProjectDto>> GetAllProjectNotPaging()
+        {
+            return await Context.GetAll<Project>()
+                .Select(s => new GetProjectDto
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    StartDate = s.StartDate,
+                    EndDate = s.EndDate,
+                    Status = s.Status,
+                    ClientEmailAddress = s.Customer.EmailAddress,
+                }).ToListAsync();
         }
     }
 }

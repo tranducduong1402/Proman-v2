@@ -1,0 +1,46 @@
+<form class="form-horizontal" autocomplete="off" #editUserModal="ngForm" (ngSubmit)="save()">
+  <abp-modal-header [title]="'Edit Column Status' | localize" (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
+  <div class="modal-body" style="margin: 0 20 5 20;">
+    <hr>
+    <mat-dialog-content class="tab-modal">
+      <tabset>
+        <tab [heading]="'Column Status Detail' | localize" class="pt-3 px-2">
+          <div class="m-t-10">
+            <div class="form-group row required">
+              <label class="col-md-3 col-form-label" for="name">
+                {{ "Column-Status-Name" | localize }}
+              </label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" name="name" id="name" required [(ngModel)]="columnStatus.name"
+                  #nameModel="ngModel" #nameEl />
+                <abp-validation-summary [control]="nameModel" [controlEl]="nameEl"></abp-validation-summary>
+              </div>
+            </div>
+            <div class="form-group row required">
+              <label class="col-md-3 col-form-label" for="type">
+                {{ "Column-Status-Type" | localize }}
+              </label>
+              <div class="col-md-9">
+                <input type="number" class="form-control" name="type" id="type" required [(ngModel)]="columnStatus.type"
+                  #typeModel="ngModel" #typeEl />
+                <abp-validation-summary [control]="typeModel" [controlEl]="typeEl"></abp-validation-summary>
+              </div>
+              <!-- <div class="col-md-9" style="margin-top: 10px;">
+                <span>
+                  <input type="radio" id="type" name="type" value="0"/> 0 - Ticket
+                </span>
+                <span>
+                  <input type="radio" id="type" name="type" value="1"/> 1 - Task
+                </span>
+              </div> -->
+            </div>
+            <div>
+              <p>Note: <span style="color: red;">&emsp;Type: 0 - Ticket</span> <span  style="color: red;">&emsp;Type: 1 -Task</span></p></div>
+          </div>
+        </tab>
+      </tabset>
+    </mat-dialog-content>
+  </div>
+  <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!editUserModal.form.valid || saving"
+    (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
+</form>

@@ -40,6 +40,8 @@ export class EditClientComponent extends AppComponentBase
 
   ngOnInit(): void {
     this._userService.get(this.id).subscribe((result) => {
+      console.log(result);
+      
       this.user = result;
 
       this._userService.getRoles().subscribe((result2) => {

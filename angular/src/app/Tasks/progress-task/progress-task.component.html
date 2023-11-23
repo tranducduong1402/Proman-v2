@@ -1,0 +1,106 @@
+<div class="container-xl">
+  <div class="row pb-3 pt-3">
+    <div class="col-12 text center">
+      <h1>Progress Tasks</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 board">
+      <div class="kanban-board" cdkDropListGroup>
+
+        <!-- <div class="column" (dragover)="onDragOver($event)" (drop)="onDrop($event, 'To Do')"> -->
+        <div class="column" id="tasksArray1" >
+            <div class="column-header">Coding</div>
+            <!-- <div class="task" draggable="true" *ngFor="let item of filterTickets('To Do')" (dragstart)="onDragStart(item)"> -->
+            <div 
+              cdkDropList class="container-xl" 
+              [cdkDropListConnectedTo]="['tasksArray2', 'tasksArray3', 'tasksArray4']"
+              (cdkDropListDropped)="onDrop($event)" 
+              [cdkDropListData]="tasksArray"
+            >
+              <div class="drag-item" cdkDrag *ngFor="let item of filterTasks('Coding')">
+                Task : {{ item.title }}
+                <br>
+                Ticket : {{ item.title }}
+              </div>
+              <!-- Ticket : {{ item.title }} -->
+              <!-- Ticket : {{item.ticketId}} -->
+              <!-- <br> -->
+              <!-- Project : {{ item.projectName }} -->
+              <!-- Project: {{item.ticketName}} -->
+            </div>
+        </div>
+
+        <!-- <div class="column" (dragover)="onDragOver($event)" (drop)="onDrop($event, 'Progress')">  -->
+        <div class="column" id="tasksArray2"> 
+          <div class="column-header">Code Bug</div>
+          <div 
+            cdkDropList class="container-xl" 
+            [cdkDropListConnectedTo]="['tasksArray1', 'tasksArray3', 'tasksArray4']"
+            (cdkDropListDropped)="onDrop($event)" 
+            [cdkDropListData]="tasksArray"
+          >
+            <div class="drag-item" cdkDrag *ngFor="let item of filterTasks('Code Bug')">
+              Task : {{ item.title }}
+                <br>
+              Ticket : {{ item.title }}
+            </div>
+          <!-- <div class="task" draggable="true" *ngFor="let item of filterTickets('Progress')" (dragstart)="onDragStart(item)"> -->
+            <!-- Ticket : {{ item.title }} -->
+            <!-- Ticket : {{item.ticketId}} -->
+              <!-- <br> -->
+            <!-- Project : {{ item.projectName }} -->
+            <!-- Project: {{item.ticketName}} -->
+          </div>
+        </div>
+
+        <!-- <div class="column" (dragover)="onDragOver($event)" (drop)="onDrop($event, 'Done')"> -->
+        <div class="column" id="tasksArray3">
+          <div class="column-header">Review Code</div>
+          <div 
+            cdkDropList class="container-xl" 
+            [cdkDropListConnectedTo]="['tasksArray1', 'tasksArray2', 'tasksArray4']"
+            (cdkDropListDropped)="onDrop($event)" 
+            [cdkDropListData]="tasksArray"
+          >
+            <div class="drag-item" cdkDrag *ngFor="let item of filterTasks('Review Code')">
+              Task : {{ item.title }}
+                <br>
+              Ticket : {{ item.title }}
+            </div>
+          <!-- <div class="task" draggable="true" *ngFor="let item of filterTickets('Done')" (dragstart)="onDragStart(item)"> -->
+            <!-- Ticket : {{ item.title }} -->
+            <!-- Ticket : {{item.ticketId}} -->
+              <!-- <br> -->
+            <!-- Project : {{ item.projectName }} -->
+            <!-- Project: {{item.ticketName}} -->
+          </div>
+        </div>
+
+        <!-- <div class="column" (dragover)="onDragOver($event)" (drop)="onDrop($event, 'Done')"> -->
+        <div class="column" id="tasksArray4">
+          <div class="column-header">Done Code</div>
+          <div 
+            cdkDropList class="container-xl" 
+            [cdkDropListConnectedTo]="['tasksArray1', 'tasksArray2', 'tasksArray3']"
+            (cdkDropListDropped)="onDrop($event)" 
+            [cdkDropListData]="tasksArray"
+          >
+            <div class="drag-item" cdkDrag *ngFor="let item of filterTasks('Done Code')">
+              Task : {{ item.title }}
+                <br>
+              Ticket : {{ item.title }}
+            </div>
+            <!-- <div class="task" draggable="true" *ngFor="let item of filterTickets('Done')" (dragstart)="onDragStart(item)"> -->
+              <!-- Ticket : {{ item.title }} -->
+              <!-- Ticket : {{item.ticketId}} -->
+                <!-- <br> -->
+              <!-- Project : {{ item.projectName }} -->
+              <!-- Project: {{item.ticketName}} -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
