@@ -1,8 +1,11 @@
 <!-- comment.component.html -->
 <div class="modal-body">
+  <abp-modal-header
+    title="Comment"
+    (onCloseClick)="bsModalRef.hide()"
+  ></abp-modal-header>
   <div class="container mt-3">
     <div class="form-group">
-      <label for="newComment">Add a comment</label>
       <div id="editor-container"></div>
     </div>
     <ng-container *ngIf="activeEdit == -1; else editMode">
