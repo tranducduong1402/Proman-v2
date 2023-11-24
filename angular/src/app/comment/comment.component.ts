@@ -69,7 +69,7 @@ export class CommentComponent extends AppComponentBase implements OnInit {
         UserId: this.userInfo.id,
       };
       this.commentSV.create(newComment).subscribe((res) => {
-        this.comments.unshift(res.result);
+        this.getData();
         this.newCommentText = "";
       });
     }
