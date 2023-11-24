@@ -36,5 +36,9 @@ import { Observable } from "rxjs";
     getAllProjectNotPaging(): Observable<any> {
       return this.http.get(this.rootUrl + "/GetAllProjectNotPaging");
     }
+
+    getAllTotal(): Observable<any> {
+      return this.http.get(this.rootUrl + "/GetTotal");
+    }
   }
   
