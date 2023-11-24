@@ -231,5 +231,22 @@ namespace ProMan.APIs.Projects
                     ClientEmailAddress = s.Customer.EmailAddress,
                 }).ToListAsync();
         }
+
+        [HttpGet]
+        public async Task<TotalDto> GetTotal()
+        {
+            var countProject = Context.GetAll<Project>().Count();
+            var countUser = Context.GetAll<User>().Where(s => s.IsClient == null || s.IsClient.Value == false).Count();
+            var countTicket = Context.GetAll<Ticket>().Count();
+            var countTask = Context.GetAll<Entities.Task>().Count();
+
+            return new TotalDto
+            {
+                CountProject = countProject,
+                CountUser = countUser,
+                CountTicket = countTicket,
+                CountTask = countTask
+            };
+        }
     }
 }

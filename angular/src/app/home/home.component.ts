@@ -1,4 +1,6 @@
-import { Component, Injector, ChangeDetectionStrategy } from '@angular/core';
+import { result } from 'lodash-es';
+import { ProjectService } from '@app/service/api/project.service';
+import { Component, Injector, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 
@@ -7,8 +9,28 @@ import { appModuleAnimation } from '@shared/animations/routerTransition';
   animations: [appModuleAnimation()],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent extends AppComponentBase {
-  constructor(injector: Injector) {
+export class HomeComponent extends AppComponentBase implements OnInit {
+
+  public total: TotalDto;
+  constructor(injector: Injector,
+    public projectService: ProjectService) {
     super(injector);
   }
+
+  ngOnInit(): void {
+    this.getTotal();
+  }
+
+  getTotal() {
+    this.projectService.getAllTotal().subscribe((res) => {
+      this.total = res.result;
+    })
+  }
+}
+
+export class TotalDto {
+  countProject: number;
+  countUser: number;
+  countTicket: number;
+  countTask: number;
 }
