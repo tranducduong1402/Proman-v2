@@ -65,11 +65,11 @@ export class CommentComponent extends AppComponentBase implements OnInit {
     if (this.newCommentText.trim() !== "") {
       let newComment = {
         Description: this.newCommentText.trim(),
-        TicketID: 5,
+        TicketID: this.ticketID,
         UserId: this.userInfo.id,
       };
       this.commentSV.create(newComment).subscribe((res) => {
-        this.comments.unshift(res.result);
+        this.getData();
         this.newCommentText = "";
       });
     }
