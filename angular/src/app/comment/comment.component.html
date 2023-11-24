@@ -1,0 +1,65 @@
+<!-- comment.component.html -->
+<div class="modal-body">
+  <div class="container mt-3">
+    <div class="form-group">
+      <label for="newComment">Add a comment</label>
+      <div id="editor-container"></div>
+    </div>
+    <ng-container *ngIf="activeEdit == -1; else editMode">
+      <button class="btn btn-primary" (click)="addComment()">Add Comment</button>
+    </ng-container>
+    <ng-template #editMode>
+      <button class="btn btn-sm btn-primary" (click)="actionEdit()">Edit Comment</button>
+      <button class="btn btn-sm ml-1 btn-secondary" (click)="actionCancelEdit()">Cancel</button>
+    </ng-template>
+    <hr />
+    <label for="newComment">List comments</label>
+    <div class="list-comment">
+      <ng-container *ngIf="comments && comments.length > 0">
+        <div
+          *ngFor="let comment of comments; let i = index"
+          class="comment mb-3 border rounded"
+        >
+          <div
+            class="p-3 d-flex justify-content-between"
+            (mouseenter)="onMouseEnter(comment, i)"
+            (mouseleave)="onMouseLeave(comment, i)"
+          >
+            <div class="d-flex">
+              <div class="mr-3">
+                <img
+                  src="assets/img/user.png"
+                  alt="Avatar"
+                  class="avatar-img"
+                />
+              </div>
+              <div>
+                <div>
+                  <span class="user-name">{{ comment.user?.userName }}</span>
+                </div>
+                <div [innerHTML]="comment.description"></div>
+                <small class="text-muted">{{
+                  formatDate(comment.creationTime)
+                }}</small>
+              </div>
+            </div>
+            <div class="comment-actions" *ngIf="activeIndex == i">
+              <button
+                class="btn btn-secondary btn-sm mr-1"
+                (click)="clickEdit(comment, i)"
+              >
+                <i class="fas fa-pencil-alt"></i>
+                Edit
+              </button>
+              <button class="btn btn-danger btn-sm" (click)="deleteAction(comment, i)">
+                <i class="fas fa-trash"></i>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+

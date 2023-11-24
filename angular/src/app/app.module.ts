@@ -74,6 +74,8 @@ import {
     CdkDrag,
     CdkDropList,
   } from '@angular/cdk/drag-drop';
+import { CommentComponent } from './comment/comment.component';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -127,6 +129,7 @@ import {
         ColumnStatusesComponent,
         CreateColumnStatusComponent,
         EditColumnStatusComponent,
+        CommentComponent,
 
     ],
     imports: [
