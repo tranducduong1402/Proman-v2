@@ -7,6 +7,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { finalize } from 'rxjs';
 import { EditTicketComponent } from './edit-ticket/edit-ticket.component';
 import { CreateTicketComponent } from './create-ticket/create-ticket.component';
+import { CommentComponent } from '@app/comment/comment.component';
 
 class PagedUsersRequestDto extends PagedRequestDto {
   keyword: string;
@@ -123,6 +124,25 @@ export class TicketsComponent extends PagedListingComponentBase<TicketDto> {
     showCreateOrEditTicketDialog.content.onSave.subscribe(() => {
       this.refresh();
     });
+  }
+
+  openComment(e): void {
+    this.showDialogComment(e);
+  }
+
+  showDialogComment(ticket: any): void {
+    let createOrEditProjectDialog: BsModalRef;
+    if(ticket) {
+      createOrEditProjectDialog = this._modalService.show(
+        CommentComponent,
+        {
+          class: 'modal-lg',
+          initialState: {
+            ticketID: ticket.id,
+          }
+        }
+      );
+    }
   }
 }
 
